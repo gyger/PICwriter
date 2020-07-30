@@ -164,6 +164,11 @@ class GratingCoupler(tk.Component):
                 cur_pos = outer_rad
 
         clad_path = gdspy.Path(self.wgt.wg_width + 2 * self.wgt.clad_width, (0, 0))
+
+        if (self.taper_length < self.wgt.wg_width):
+            clad_path.x = - self.wgt.clad_width
+            clad_path.w = (2 * np.sin(self.theta / 2.0) * self.length + 2 * self.wgt.clad_width)/2  # Half width in gdspy.Path
+
         clad_path.segment(
             self.length,
             direction="+x",
