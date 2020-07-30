@@ -270,6 +270,14 @@ class InlineZeroLengthCavity(tk.Component):
             self.total_length = (
                 num_holes * period + 2 * self.taper_length + 2 * self.wgt_beam_length
             )
+        elif taper_type == "cavity":
+            # Cavity based on the design from Quan and Loncar (2011) https://doi.org/10.1364/OE.19.018529.
+            if self.num_holes != 0:
+                raise ValueError(
+                    "For the cavity taper, the number of holes needs to be 0, everything is in the taper."
+                )
+            self.taper_length = num_taper_holes * period
+            self.total_length = 2 * self.taper_length
 
         self.__build_cell()
         self.__build_ports()
@@ -346,6 +354,24 @@ class InlineZeroLengthCavity(tk.Component):
                 x_out = startx_out - i * taper_period
                 y_out = starty_out
                 taper_list_out.append(gdspy.Round((x_out, y_out), taper_radii, tolerance=0.0001))
+        elif self.taper_type == "cavity":
+            startx_in = beam_x + (self.wgt_beam_length) + self.period/2
+            startx_out = beam_x + (self.total_length - self.wgt_beam_length) - self.period/2
+            starty_in = beam_y
+            starty_out = beam_y
+            taper_list_in = []
+            taper_list_out = []
+
+            for i in range(int(self.num_taper_holes)):
+                taper_radii = (self.radius_taper - self.radius)/(self.num_taper_holes - 1) * i  + (self.num_taper_holes * self.radius - self.radius_taper)/(self.num_taper_holes - 1)
+                x_in = startx_in + i * self.period
+                y_in = starty_in
+                taper_list_in.append(gdspy.Round((x_in, y_in), taper_radii, tolerance=0.0001))
+                
+                x_out = startx_out - i * self.period
+                y_out = starty_out
+                taper_list_out.append(gdspy.Round((x_out, y_out), taper_radii, tolerance=0.0001))
+            pass
 
         for hole in hole_list:
             nanobeam = gdspy.boolean(nanobeam, hole, "xor", precision=0.0001)
