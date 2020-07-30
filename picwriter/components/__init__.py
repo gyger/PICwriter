@@ -30,7 +30,7 @@ from .stripslotyconverter import StripSlotYConverter
 from .stripslotmmiconverter import StripSlotMMIConverter
 from .adiabaticcoupler import AdiabaticCoupler
 from .fullcoupler import FullCoupler
-from .zerolengthcavity import ZeroLengthCavity
+from .zerolengthcavity import ZeroLengthCavity, InlineZeroLengthCavity
 from .sbend import SBend
 from .ebend import EBend, EulerSBend
 from .bbend import BBend
