@@ -228,7 +228,6 @@ class InlineZeroLengthCavity(tk.Component):
         period,
         radius,
         radius_taper,
-        gap,
         wgt_beam_length,
         num_taper_holes=4,
         taper_type="FF",
@@ -248,7 +247,6 @@ class InlineZeroLengthCavity(tk.Component):
         self.period = period
         self.radius_taper = radius_taper
         self.taper_type = taper_type
-        self.gap = gap
         self.wgt_beam_length = wgt_beam_length
 
         self.wgt = wgt
